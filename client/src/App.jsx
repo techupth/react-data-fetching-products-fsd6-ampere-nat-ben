@@ -18,7 +18,6 @@ function App() {
       setIsLoading(true);
       let delayRes = await delay(300);
       const response = await axios.get("http://localhost:4001/products");
-
       const products = response.data.data;
       // console.log("products ", products);
       // console.log(products[0].description);
@@ -29,8 +28,8 @@ function App() {
         setIsComplete(false);
       }, 500);
     } catch (error) {
-      setIsError(true);
       console.log(error);
+      setIsError(true);
     }
   };
 
@@ -52,10 +51,10 @@ function App() {
   };
 
   const displayFetchingStatus = () => {
-    if (isLoading) {
-      return "Loading...";
-    } else if (isError) {
+    if (isError) {
       return "Fetching Error...";
+    } else if (isLoading) {
+      return "Loading...";
     } else if (isComplete) {
       return "Complete";
     } else {
