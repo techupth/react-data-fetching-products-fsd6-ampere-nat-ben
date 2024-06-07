@@ -6,31 +6,36 @@ function App() {
   const [searchResult, setSearchResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const delay = (delayInMs) => {
+    return new Promise((resolve) => setTimeout(resolve, delayInMs));
+  };
+
   const initFetch = async () => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
+      let delayRes = await delay(300);
       const response = await axios.get("http://localhost:4001/products");
       const products = response.data.data;
-      // console.log(products);
+      console.log("products ", products);
       // console.log(products[0].description);
       setSearchResult(products);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleProductDelete = async (indexToDelete) => {
-    // console.log(indexToDelete);
+    console.log("indexToDelete ", indexToDelete);
 
-    const request = await axios.delete(
+    const requestToDelete = await axios.delete(
       `http://localhost:4001/products/${indexToDelete}`
     );
-    console.log(request);
-    console.log(request.status);
-    const httpStatusCodes = request.status;
+    console.log("request to delete ", requestToDelete);
+    console.log("request status ", requestToDelete.status);
+    const httpStatusCodes = requestToDelete.status;
     if (httpStatusCodes === 200) {
       initFetch();
     } else {
