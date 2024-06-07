@@ -31,8 +31,6 @@ function App() {
     } catch (error) {
       setIsError(true);
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -49,6 +47,7 @@ function App() {
       initFetch();
     } else {
       console.log("something happened...");
+      setIsError(true);
     }
   };
 
