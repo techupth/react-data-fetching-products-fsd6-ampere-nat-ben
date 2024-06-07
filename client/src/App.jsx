@@ -3,20 +3,29 @@ import axios from "axios";
 import "./App.css";
 
 function App() {
-  const [query, setQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const initFetch = async () => {
     const response = await axios.get("http://localhost:4001/products");
     const products = response.data.data;
     // console.log(products);
     // console.log(products[0].description);
     setSearchResult(products);
-    console.log(searchResult);
   };
+
+  const handleProductDelete = async (indexToDelete) => {
+    console.log(indexToDelete);
+
+    const request = await axios.delete(
+      `http://localhost:4001/products/${indexToDelete}`
+    );
+    console.log(request);
+  };
+
   useEffect(() => {
     initFetch();
-  }, []);
+  }, [searchResult]);
 
   return (
     <div className="App">
@@ -41,7 +50,12 @@ function App() {
                 <p>Product description: {product.description}</p>
               </div>
 
-              <button className="delete-button">x</button>
+              <button
+                className="delete-button"
+                onClick={() => handleProductDelete(product.id)}
+              >
+                x
+              </button>
             </div>
           );
         })}
