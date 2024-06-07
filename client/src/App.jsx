@@ -7,25 +7,40 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   const initFetch = async () => {
-    const response = await axios.get("http://localhost:4001/products");
-    const products = response.data.data;
-    // console.log(products);
-    // console.log(products[0].description);
-    setSearchResult(products);
+    try {
+      // setIsLoading(true);
+      const response = await axios.get("http://localhost:4001/products");
+      const products = response.data.data;
+      // console.log(products);
+      // console.log(products[0].description);
+      setSearchResult(products);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsLoading(false);
+    }
   };
 
   const handleProductDelete = async (indexToDelete) => {
-    console.log(indexToDelete);
+    // console.log(indexToDelete);
 
     const request = await axios.delete(
       `http://localhost:4001/products/${indexToDelete}`
     );
     console.log(request);
+    console.log(request.status);
+    const httpStatusCodes = request.status;
+    if (httpStatusCodes === 200) {
+      initFetch();
+    } else {
+      console.log("something happened...");
+    }
   };
 
   useEffect(() => {
     initFetch();
-  }, [searchResult]);
+  }, []);
 
   return (
     <div className="App">
@@ -33,6 +48,7 @@ function App() {
         <h1 className="app-title">Products</h1>
       </div>
       <div className="product-list">
+        {isLoading ? "Loading..." : null}
         {searchResult.map((product, index) => {
           return (
             <div className="product" key={product.id}>
