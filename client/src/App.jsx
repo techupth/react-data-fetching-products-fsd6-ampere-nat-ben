@@ -59,7 +59,7 @@ function App() {
     } else if (isComplete) {
       return "Complete";
     } else {
-      return;
+      return <br />;
     }
   };
 
