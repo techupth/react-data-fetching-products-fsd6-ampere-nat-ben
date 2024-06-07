@@ -5,9 +5,7 @@ import "./App.css";
 
 function App() {
   const [searchResult, setSearchResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
+  const [status, setStatus] = useState("");
 
   const delay = (delayInMs) => {
     return new Promise((resolve) => setTimeout(resolve, delayInMs));
@@ -15,21 +13,20 @@ function App() {
 
   const initFetch = async () => {
     try {
-      setIsLoading(true);
+      setStatus("Loading...");
       let delayRes = await delay(300);
       const response = await axios.get("http://localhost:4001/products");
       const products = response.data.data;
       // console.log("products ", products);
       // console.log(products[0].description);
       setSearchResult(products);
-      setIsLoading(false);
-      setIsComplete(true);
+      setStatus("Completed");
       setTimeout(() => {
-        setIsComplete(false);
+        setStatus(<br />);
       }, 500);
     } catch (error) {
       console.log(error);
-      setIsError(true);
+      setStatus("Fetching error...");
     }
   };
 
@@ -46,19 +43,7 @@ function App() {
       initFetch();
     } else {
       console.log("something happened...");
-      setIsError(true);
-    }
-  };
-
-  const displayFetchingStatus = () => {
-    if (isError) {
-      return "Fetching Error...";
-    } else if (isLoading) {
-      return "Loading...";
-    } else if (isComplete) {
-      return "Complete";
-    } else {
-      return <br />;
+      setStatus("Fetching error...");
     }
   };
 
@@ -72,7 +57,7 @@ function App() {
         <h1 className="app-title">Products</h1>
       </div>
       <div className="product-list">
-        {displayFetchingStatus()}
+        {status}
         {searchResult.map((product, index) => (
           <Product
             key={product.id}
